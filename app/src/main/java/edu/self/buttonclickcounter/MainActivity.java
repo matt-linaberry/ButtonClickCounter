@@ -5,14 +5,42 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
+    private Button ourButton;
+    private TextView ourMessage;
+    private int numTimesClicked = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main); // this loads the actual view.
+        // link the UI to our properties allocated.
+        // this is like the control-drag action for xcode stuff.
+        ourButton = (Button)findViewById(R.id.button);
+        ourMessage = (TextView)findViewById(R.id.textView);
+
+        // create button listeners.
+        View.OnClickListener ourOnClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                numTimesClicked++;
+                String result = "The button got tapped " + numTimesClicked + " time";
+                if (numTimesClicked != 1) {
+                    result += "s...";
+                }
+                ourMessage.setText(result);
+            }
+        };
+
+        // add button listeners.
+        ourButton.setOnClickListener(ourOnClickListener);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -21,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu); // add something to the menu.
         return true;
     }
 
@@ -34,8 +62,9 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Toast toastMessage = Toast.makeText(this, "The settings menu option got tapped.", Toast.LENGTH_LONG);
+            Toast toastMessage = Toast.makeText(this, "Text value is now: " + ourMessage.getText(), Toast.LENGTH_LONG);
             toastMessage.show();
+            numTimesClicked = 0;
             return true;
         }
 
